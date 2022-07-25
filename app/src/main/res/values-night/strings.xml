@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="default_image_description">image</string>
+    <string name="set_wallpaper_btn_text">Set Wallpaper</string>
 </resources>

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WallPaper App</string>
     <string name="default_image_description">image</string>
+    <string name="set_wallpaper_btn_text">Set Wallpaper</string>
 </resources>

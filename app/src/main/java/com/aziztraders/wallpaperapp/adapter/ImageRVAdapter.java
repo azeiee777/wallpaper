@@ -1,27 +1,30 @@
 package com.aziztraders.wallpaperapp.adapter;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.aziztraders.wallpaperapp.HomeActivity;
+import com.aziztraders.wallpaperapp.WallpaperActivity;
 import com.aziztraders.wallpaperapp.databinding.SingleItemLayoutBinding;
 import com.aziztraders.wallpaperapp.models.ImageModel;
 
 import java.util.List;
 
-public class ImageRVAdapter extends RecyclerView.Adapter<ImageRVAdapter.MyViewHolder> {
+
+public class ImageRVAdapter extends RecyclerView.Adapter<ImageRVAdapter.MyViewHolder>{
 
     private List<ImageModel> data;
+    private Context context;
 
-    public ImageRVAdapter(List<ImageModel> data) {
+    public ImageRVAdapter(List<ImageModel> data, Context context) {
         this.data = data;
+        this.context =context;
     }
 
     @NonNull
@@ -34,11 +37,16 @@ public class ImageRVAdapter extends RecyclerView.Adapter<ImageRVAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.singleItemLayoutBinding.img1.setImageResource(data.get(position).getImg1());
+
+        int image = data.get(position).getImg1();
+        holder.singleItemLayoutBinding.img1.setImageResource(image);
         holder.singleItemLayoutBinding.img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Tag", "onClick: " + (position + 1) );
+                Intent intent = new Intent(context, WallpaperActivity.class);
+                intent.putExtra("image",image);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
     }
@@ -48,13 +56,18 @@ public class ImageRVAdapter extends RecyclerView.Adapter<ImageRVAdapter.MyViewHo
         return data.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder{
 
-        SingleItemLayoutBinding singleItemLayoutBinding;
+        private SingleItemLayoutBinding singleItemLayoutBinding;
 
         public MyViewHolder(@NonNull SingleItemLayoutBinding singleItemLayoutBinding) {
             super(singleItemLayoutBinding.getRoot());
             this.singleItemLayoutBinding = singleItemLayoutBinding;
+           // singleItemLayoutBinding.getRoot().setOnClickListener(this);
         }
+    }
+
+    public interface RecyclerViewClickListener {
+        void mClick(View v, int position);
     }
 }
