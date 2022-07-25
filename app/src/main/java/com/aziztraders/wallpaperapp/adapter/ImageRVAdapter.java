@@ -9,20 +9,20 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.aziztraders.wallpaperapp.WallpaperActivity;
 import com.aziztraders.wallpaperapp.databinding.SingleItemLayoutBinding;
-import com.aziztraders.wallpaperapp.models.ImageModel;
+import com.aziztraders.wallpaperapp.models.WallpaperModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 
 public class ImageRVAdapter extends RecyclerView.Adapter<ImageRVAdapter.MyViewHolder>{
 
-    private List<ImageModel> data;
+    private List<WallpaperModel> data;
     private Context context;
 
-    public ImageRVAdapter(List<ImageModel> data, Context context) {
+    public ImageRVAdapter(List<WallpaperModel> data, Context context) {
         this.data = data;
         this.context =context;
     }
@@ -38,13 +38,15 @@ public class ImageRVAdapter extends RecyclerView.Adapter<ImageRVAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        int image = data.get(position).getImg1();
-        holder.singleItemLayoutBinding.img1.setImageResource(image);
+        String url = data.get(position).getUrl();
+        Picasso.get()
+                .load(url)
+                .into(holder.singleItemLayoutBinding.img1);
         holder.singleItemLayoutBinding.img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, WallpaperActivity.class);
-                intent.putExtra("image",image);
+                intent.putExtra("image",url);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
@@ -63,11 +65,6 @@ public class ImageRVAdapter extends RecyclerView.Adapter<ImageRVAdapter.MyViewHo
         public MyViewHolder(@NonNull SingleItemLayoutBinding singleItemLayoutBinding) {
             super(singleItemLayoutBinding.getRoot());
             this.singleItemLayoutBinding = singleItemLayoutBinding;
-           // singleItemLayoutBinding.getRoot().setOnClickListener(this);
         }
-    }
-
-    public interface RecyclerViewClickListener {
-        void mClick(View v, int position);
     }
 }
